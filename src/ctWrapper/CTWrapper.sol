@@ -23,17 +23,17 @@ contract CTWrapper is IERC1155Receiver, ReentrancyGuard {
     function computeAddress(uint256 ctId, bytes32 salt) public view returns (address predicted) {
         predicted = Create2.computeAddress(salt, keccak256(computeBytecode(ctId)), address(this));
     }
-    function wrap(uint256 ctId, uint256 amount) external nonReentrant {
+    function deposit(uint256 ctId, uint256 amount, address recipient) external nonReentrant {
         address ctErc20 = ctIdToErc20[ctId];
         if (ctErc20 == address(0)) {
             ctIdToErc20[ctId] = Create2.deploy(0, bytes32(ctId), computeBytecode(ctId));
             ctErc20 = ctIdToErc20[ctId];
         }
         IERC1155(ctAddress).safeTransferFrom(msg.sender, address(this), ctId, amount, "");
-        ICTERC20(ctErc20).mint(msg.sender, amount);
+        ICTERC20(ctErc20).mint(recipient, amount);
     }
 
-    function unwrap(uint256 ctId, uint256 amount) external nonReentrant {
+    function redeem(uint256 ctId, uint256 amount) external nonReentrant {
         address ctErc20 = ctIdToErc20[ctId];
         require(ctErc20 != address(0), "CTWrapper: CT not found");
         ICTERC20(ctErc20).burn(msg.sender, amount);
