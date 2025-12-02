@@ -8,3 +8,4 @@ foundry-out/
 .vscode/
 out/
 .env
+.env.local
