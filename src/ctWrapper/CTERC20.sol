@@ -12,6 +12,8 @@ contract CTErc20 is ERC20, Ownable, ICTERC20 {
         ctId = _ctId;
     }
 
+    //isApproved for transfers should allow PoolManager
+
     function mint(address to, uint256 amount) external onlyOwner {
         _mint(to, amount);
     }
