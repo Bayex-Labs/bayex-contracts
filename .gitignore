@@ -9,3 +9,5 @@ foundry-out/
 out/
 .env
 .env.local
+deployments/
+broadcast/

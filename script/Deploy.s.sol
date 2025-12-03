@@ -28,7 +28,7 @@ contract Deploy is Script {
 
         // Deploy CTWrapper
         // CT address must be provided via environment variable
-        address ctAddress = vm.envAddress("CT_ADDRESS");
+        address ctAddress = 0x4D97DCd97eC945f40cF65F87097ACe5EA0476045;
         console.log("Deploying CTWrapper with CT address:", ctAddress);
 
         CTWrapper ctWrapper = new CTWrapper(ctAddress);
@@ -63,5 +63,10 @@ contract Deploy is Script {
         string memory filename = string.concat("deployments/", vm.toString(chainId), ".json");
         json.write(filename);
         console.log("\nDeployment addresses saved to:", filename);
+
+        vm.serializeAddress("deploy", "PoolManager", address(poolManager));
+        vm.serializeAddress("deploy", "CTWrapper", address(ctWrapper));
+        json = vm.serializeString("deploy", "ABI", ""); // dummy
     }
 }
+// forge script script/Deploy.s.sol --rpc-url {rpcurl} --verify --ffi --broadcast
