@@ -5,6 +5,7 @@ import {Script, console} from "forge-std/Script.sol";
 import {stdJson} from "forge-std/StdJson.sol";
 import {PoolManager} from "../src/PoolManager.sol";
 import {CTWrapper} from "../src/ctWrapper/CTWrapper.sol";
+import {PoolStateReader} from "../src/PoolStateReader.sol";
 
 contract Deploy is Script {
     using stdJson for string;
@@ -33,6 +34,11 @@ contract Deploy is Script {
 
         CTWrapper ctWrapper = new CTWrapper(ctAddress);
         console.log("CTWrapper deployed at:", address(ctWrapper));
+
+        // Deploy PoolStateReader
+        console.log("Deploying PoolStateReader");
+        PoolStateReader poolStateReader = new PoolStateReader(poolManager);
+        console.log("PoolStateReader deployed at:", address(poolStateReader));
 
         vm.stopBroadcast();
 
