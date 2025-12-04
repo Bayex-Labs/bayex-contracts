@@ -20,13 +20,17 @@ contract CTWrapper is IERC1155Receiver, ReentrancyGuard {
     function computeBytecode(uint256 ctId) public pure returns (bytes memory) {
         return abi.encodePacked(type(CTErc20).creationCode, abi.encode(ctId));
     }
-    function computeAddress(uint256 ctId, bytes32 salt) public view returns (address predicted) {
-        predicted = Create2.computeAddress(salt, keccak256(computeBytecode(ctId)), address(this));
+    function computeAddress(uint256 ctId) public view returns (address predicted) {
+        predicted = Create2.computeAddress(
+            keccak256(abi.encode(ctId)),
+            keccak256(computeBytecode(ctId)),
+            address(this)
+        );
     }
     function deposit(uint256 ctId, uint256 amount) external nonReentrant {
         address ctErc20 = ctIdToErc20[ctId];
         if (ctErc20 == address(0)) {
-            ctIdToErc20[ctId] = Create2.deploy(0, bytes32(ctId), computeBytecode(ctId));
+            ctIdToErc20[ctId] = Create2.deploy(0, keccak256(abi.encode(ctId)), computeBytecode(ctId));
             ctErc20 = ctIdToErc20[ctId];
 
             //initialize Pool
