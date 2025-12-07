@@ -12,6 +12,10 @@ contract CTErc20 is ERC20, Ownable, ICTERC20 {
         ctId = _ctId;
     }
 
+    // set token decimals to 6
+    function decimals() public view virtual override returns (uint8) {
+        return 6;
+    }
     //isApproved for transfers should allow PoolManager
 
     function mint(address to, uint256 amount) external onlyOwner {

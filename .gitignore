@@ -5,9 +5,12 @@ crytic-export/
 node_modules/
 typechain/
 foundry-out/
-.vscode/
 out/
 .env
 .env.local
 deployments/
 broadcast/
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
